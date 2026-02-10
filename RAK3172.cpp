@@ -1,7 +1,5 @@
 #include "RAK3172.h"
 
-static Log *display = Log::Instance();
-
 static QueueHandle_t uart_queue;
 static uart_event_t event;
 
@@ -216,15 +214,12 @@ RAKStatus RAK3172::setRegion(LoraRegion_t region)
     snprintf(message, sizeof(message), "AT+BAND=%d\r\n", region);
 
     if (!sendATCommand(message, response, sizeof(response), 2000)) {
-        display->log(eLogLevel::DEBUGGING, "RAK TIMEOUT\n");
         return RAKStatus::TIMEOUT;
     }
 
     if (strstr(response, "OK") != nullptr) {
-        display->log(eLogLevel::DEBUGGING, "RAK OK\n");
         return RAKStatus::OK;
     } else {
-        display->log(eLogLevel::DEBUGGING, "RAK ERROR\n");
         return RAKStatus::ERROR;
     }
 }
@@ -255,7 +250,6 @@ LoraRegion_t RAK3172::getRegion()
     snprintf(message, sizeof(message), "AT+BAND=?\r\n");
 
     if (!sendATCommand(message, response, sizeof(response), 2000)) {
-        display->log(eLogLevel::DEBUGGING, "RAK TIMEOUT\n");
         return LoraRegion_t::UNKNOWN; // ou algum valor padrão de erro
     }
 
@@ -302,15 +296,12 @@ RAKStatus RAK3172::setClass(LoraClass_t lora_class)
     snprintf(message, sizeof(message), "AT+CLASS=%c\r\n", _lora_class);
 
     if (!sendATCommand(message, response, sizeof(response), 2000)) {
-        display->log(eLogLevel::DEBUGGING, "RAK TIMEOUT\n");
         return RAKStatus::TIMEOUT;
     }
 
     if (strstr(response, "OK") != nullptr) {
-        display->log(eLogLevel::DEBUGGING, "RAK OK\n");
         return RAKStatus::OK;
     } else {
-        display->log(eLogLevel::DEBUGGING, "RAK ERROR\n");
         return RAKStatus::ERROR;
     }
 }
@@ -331,7 +322,6 @@ LoraClass_t RAK3172::getClass()
     snprintf(message, sizeof(message), "AT+CLASS=?\r\n");
 
     if (!sendATCommand(message, response, sizeof(response), 2000)) {
-        display->log(eLogLevel::DEBUGGING, "RAK TIMEOUT\n");
         return LoraClass_t::UNKNOWN; // ou algum valor padrão de erro
     }
 
@@ -375,15 +365,12 @@ RAKStatus RAK3172::setMode(LoraMode_t mode)
     snprintf(message, sizeof(message), "AT+NJM=%d\r\n", mode);
 
     if (!sendATCommand(message, response, sizeof(response), 2000)) {
-        display->log(eLogLevel::DEBUGGING, "RAK TIMEOUT\n");
         return RAKStatus::TIMEOUT;
     }
 
     if (strstr(response, "OK") != nullptr) {
-        display->log(eLogLevel::DEBUGGING, "RAK OK\n");
         return RAKStatus::OK;
     } else {
-        display->log(eLogLevel::DEBUGGING, "RAK ERROR\n");
         return RAKStatus::ERROR;
     }
 }
@@ -403,7 +390,6 @@ LoraMode_t RAK3172::getMode()
     snprintf(message, sizeof(message), "AT+NJM=?\r\n");
 
     if (!sendATCommand(message, response, sizeof(response), 2000)) {
-        display->log(eLogLevel::DEBUGGING, "RAK TIMEOUT\n");
         return LoraMode_t::UNKNOWN; // ou algum valor padrão de erro
     }
 
@@ -442,15 +428,12 @@ RAKStatus RAK3172::setSubBand(int band)
     snprintf(message, sizeof(message), "AT+CHE=%d\r\n", band);
 
     if (!sendATCommand(message, response, sizeof(response), 2000)) {
-        display->log(eLogLevel::DEBUGGING, "RAK TIMEOUT\n");
         return RAKStatus::TIMEOUT;
     }
 
     if (strstr(response, "OK") != nullptr) {
-        display->log(eLogLevel::DEBUGGING, "RAK OK\n");
         return RAKStatus::OK;
     } else {
-        display->log(eLogLevel::DEBUGGING, "RAK ERROR\n");
         return RAKStatus::ERROR;
     }
 }
@@ -479,7 +462,6 @@ int RAK3172::getSubBand()
     snprintf(message, sizeof(message), "AT+CHE=?\r\n");
 
     if (!sendATCommand(message, response, sizeof(response), 2000)) {
-        display->log(eLogLevel::DEBUGGING, "RAK TIMEOUT\n");
         return -1; // ou algum valor padrão de erro
     }
 
@@ -504,15 +486,12 @@ RAKStatus RAK3172::setADR(int adr)
     snprintf(message, sizeof(message), "AT+ADR=%d\r\n", adr);
 
     if (!sendATCommand(message, response, sizeof(response), 2000)) {
-        display->log(eLogLevel::DEBUGGING, "RAK TIMEOUT\n");
         return RAKStatus::TIMEOUT;
     }
 
     if (strstr(response, "OK") != nullptr) {
-        display->log(eLogLevel::DEBUGGING, "RAK OK\n");
         return RAKStatus::OK;
     } else {
-        display->log(eLogLevel::DEBUGGING, "RAK ERROR\n");
         return RAKStatus::ERROR;
     }
 }
@@ -531,7 +510,6 @@ int RAK3172::getADR()
     snprintf(message, sizeof(message), "AT+ADR=?\r\n");
 
     if (!sendATCommand(message, response, sizeof(response), 2000)) {
-        display->log(eLogLevel::DEBUGGING, "RAK TIMEOUT\n");
         return -1; // ou algum valor padrão de erro
     }
 
@@ -555,15 +533,12 @@ RAKStatus RAK3172::setDR(int dr)
     snprintf(message, sizeof(message), "AT+DR=%d\r\n", dr);
 
     if (!sendATCommand(message, response, sizeof(response), 2000)) {
-        display->log(eLogLevel::DEBUGGING, "RAK TIMEOUT\n");
         return RAKStatus::TIMEOUT;
     }
 
     if (strstr(response, "OK") != nullptr) {
-        display->log(eLogLevel::DEBUGGING, "RAK OK\n");
         return RAKStatus::OK;
     } else {
-        display->log(eLogLevel::DEBUGGING, "RAK ERROR\n");
         return RAKStatus::ERROR;
     }
 }
@@ -581,7 +556,6 @@ int RAK3172::getDR()
     snprintf(message, sizeof(message), "AT+DR=?\r\n");
 
     if (!sendATCommand(message, response, sizeof(response), 2000)) {
-        display->log(eLogLevel::DEBUGGING, "RAK TIMEOUT\n");
         return -1; // ou algum valor padrão de erro
     }
 
@@ -607,15 +581,12 @@ RAKStatus RAK3172::setAck(int ack)
     snprintf(message, sizeof(message), "AT+CFM=%d\r\n", ack);
 
     if (!sendATCommand(message, response, sizeof(response), 2000)) {
-        display->log(eLogLevel::DEBUGGING, "RAK TIMEOUT\n");
         return RAKStatus::TIMEOUT;
     }
 
     if (strstr(response, "OK") != nullptr) {
-        display->log(eLogLevel::DEBUGGING, "RAK OK\n");
         return RAKStatus::OK;
     } else {
-        display->log(eLogLevel::DEBUGGING, "RAK ERROR\n");
         return RAKStatus::ERROR;
     }
 }
@@ -634,7 +605,6 @@ int RAK3172::getAck()
     snprintf(message, sizeof(message), "AT+CFM=?\r\n");
 
     if (!sendATCommand(message, response, sizeof(response), 2000)) {
-        display->log(eLogLevel::DEBUGGING, "RAK TIMEOUT\n");
         return -1; // ou algum valor padrão de erro
     }
 
@@ -658,15 +628,12 @@ RAKStatus RAK3172::setJoin1Delay(int delay_sec)
     snprintf(message, sizeof(message), "AT+JN1DL=%d\r\n", delay_sec);
 
     if (!sendATCommand(message, response, sizeof(response), 2000)) {
-        display->log(eLogLevel::DEBUGGING, "RAK TIMEOUT\n");
         return RAKStatus::TIMEOUT;
     }
 
     if (strstr(response, "OK") != nullptr) {
-        display->log(eLogLevel::DEBUGGING, "RAK OK\n");
         return RAKStatus::OK;
     } else {
-        display->log(eLogLevel::DEBUGGING, "RAK ERROR\n");
         return RAKStatus::ERROR;
     }
 }
@@ -685,7 +652,6 @@ int RAK3172::getJoin1Delay()
     snprintf(message, sizeof(message), "AT+JN1DL=?\r\n");
 
     if (!sendATCommand(message, response, sizeof(response), 2000)) {
-        display->log(eLogLevel::DEBUGGING, "RAK TIMEOUT\n");
         return -1; // ou algum valor padrão de erro
     }
 
@@ -709,15 +675,12 @@ RAKStatus RAK3172::setJoin2Delay(int delay_sec)
     snprintf(message, sizeof(message), "AT+JN2DL=%d\r\n", delay_sec);
 
     if (!sendATCommand(message, response, sizeof(response), 2000)) {
-        display->log(eLogLevel::DEBUGGING, "RAK TIMEOUT\n");
         return RAKStatus::TIMEOUT;
     }
 
     if (strstr(response, "OK") != nullptr) {
-        display->log(eLogLevel::DEBUGGING, "RAK OK\n");
         return RAKStatus::OK;
     } else {
-        display->log(eLogLevel::DEBUGGING, "RAK ERROR\n");
         return RAKStatus::ERROR;
     }
 }
@@ -735,7 +698,6 @@ int RAK3172::getJoin2Delay()
     snprintf(message, sizeof(message), "AT+JN2DL=?\r\n");
 
     if (!sendATCommand(message, response, sizeof(response), 2000)) {
-        display->log(eLogLevel::DEBUGGING, "RAK TIMEOUT\n");
         return -1; // ou algum valor padrão de erro
     }
 
@@ -759,15 +721,12 @@ RAKStatus RAK3172::setRx1Delay(int delay_sec)
     snprintf(message, sizeof(message), "AT+RX1DL=%d\r\n", delay_sec);
 
     if (!sendATCommand(message, response, sizeof(response), 2000)) {
-        display->log(eLogLevel::DEBUGGING, "RAK TIMEOUT\n");
         return RAKStatus::TIMEOUT;
     }
 
     if (strstr(response, "OK") != nullptr) {
-        display->log(eLogLevel::DEBUGGING, "RAK OK\n");
         return RAKStatus::OK;
     } else {
-        display->log(eLogLevel::DEBUGGING, "RAK ERROR\n");
         return RAKStatus::ERROR;
     }
 }
@@ -785,7 +744,6 @@ int RAK3172::getRx1Delay()
     snprintf(message, sizeof(message), "AT+RX1DL=?\r\n");
 
     if (!sendATCommand(message, response, sizeof(response), 2000)) {
-        display->log(eLogLevel::DEBUGGING, "RAK TIMEOUT\n");
         return -1; // ou algum valor padrão de erro
     }
 
@@ -809,15 +767,12 @@ RAKStatus RAK3172::setRx2Delay(int delay_sec)
     snprintf(message, sizeof(message), "AT+RX2DL=%d\r\n", delay_sec);
 
     if (!sendATCommand(message, response, sizeof(response), 2000)) {
-        display->log(eLogLevel::DEBUGGING, "RAK TIMEOUT\n");
         return RAKStatus::TIMEOUT;
     }
 
     if (strstr(response, "OK") != nullptr) {
-        display->log(eLogLevel::DEBUGGING, "RAK OK\n");
         return RAKStatus::OK;
     } else {
-        display->log(eLogLevel::DEBUGGING, "RAK ERROR\n");
         return RAKStatus::ERROR;
     }
 }
@@ -835,7 +790,6 @@ int RAK3172::getRx2Delay()
     snprintf(message, sizeof(message), "AT+RX2DL=?\r\n");
 
     if (!sendATCommand(message, response, sizeof(response), 2000)) {
-        display->log(eLogLevel::DEBUGGING, "RAK TIMEOUT\n");
         return -1; // ou algum valor padrão de erro
     }
 
@@ -859,15 +813,12 @@ RAKStatus RAK3172::setTransmitPower(int power)
     snprintf(message, sizeof(message), "AT+TXP=%d\r\n", power);
 
     if (!sendATCommand(message, response, sizeof(response), 2000)) {
-        display->log(eLogLevel::DEBUGGING, "RAK TIMEOUT\n");
         return RAKStatus::TIMEOUT;
     }
 
     if (strstr(response, "OK") != nullptr) {
-        display->log(eLogLevel::DEBUGGING, "RAK OK\n");
         return RAKStatus::OK;
     } else {
-        display->log(eLogLevel::DEBUGGING, "RAK ERROR\n");
         return RAKStatus::ERROR;
     }
 }
@@ -885,7 +836,6 @@ int RAK3172::getTransmitPower()
     snprintf(message, sizeof(message), "AT+TXP=?\r\n");
 
     if (!sendATCommand(message, response, sizeof(response), 2000)) {
-        display->log(eLogLevel::DEBUGGING, "RAK TIMEOUT\n");
         return -1; // ou algum valor padrão de erro
     }
 
@@ -905,7 +855,6 @@ int RAK3172::getRSSI()
     snprintf(message, sizeof(message), "AT+RSSI=?\r\n");
 
     if (!sendATCommand(message, response, sizeof(response), 2000)) {
-        display->log(eLogLevel::DEBUGGING, "RAK TIMEOUT\n");
         return -1; // ou algum valor padrão de erro
     }
 
@@ -925,7 +874,6 @@ int RAK3172::getSNR()
     snprintf(message, sizeof(message), "AT+SNR=?\r\n");
 
     if (!sendATCommand(message, response, sizeof(response), 2000)) {
-        display->log(eLogLevel::DEBUGGING, "RAK TIMEOUT\n");
         return -1; // ou algum valor padrão de erro
     }
 
@@ -954,12 +902,10 @@ RAKStatus RAK3172::join(int autoJoin, int interval, int numAttempts)
     snprintf(message, sizeof(message), "AT+JOIN=1:%d:%d:%d\r", autoJoin, interval, numAttempts);
 
     if (!sendATCommand(message, response, sizeof(response), 2000)) {
-        display->log(eLogLevel::DEBUGGING, "RAK TIMEOUT\n");
         return RAKStatus::TIMEOUT;
     }
 
     if (strstr(response, "OK") != nullptr) {
-        display->log(eLogLevel::DEBUGGING, "RAK OK\n");
         _joinStatus = JoinStatus::JOINING;
 
         EventBits_t bits = xEventGroupWaitBits(
@@ -971,16 +917,13 @@ RAKStatus RAK3172::join(int autoJoin, int interval, int numAttempts)
         );
 
         if(bits == 0x1){ // JOINED
-            display->log(eLogLevel::DEBUGGING, "JOINED\n");
             _joinStatus = JoinStatus::JOINED;
         }
         else if(bits == 0x2){ //JOIN FAILED
-            display->log(eLogLevel::DEBUGGING, "JOIN FAILED\n");
             _joinStatus = JoinStatus::JOIN_FAILED;
         }
         return RAKStatus::OK;
     } else {
-        display->log(eLogLevel::DEBUGGING, "RAK ERROR\n");
         return RAKStatus::ERROR;
     }
 }
@@ -1001,22 +944,18 @@ RAKStatus RAK3172::send(int port, char* data)
     char response[32];
 
     if(_joinStatus != JoinStatus::JOINED){
-        display->log(eLogLevel::DEBUGGING, "RAK NOT JOINED\n");
         return RAKStatus::ERROR;
     }
 
     snprintf(message, sizeof(message), "AT+SEND=%d:%s\n\r", port, data);
 
     if (!sendATCommand(message, response, sizeof(response), 2000)) {
-        display->log(eLogLevel::DEBUGGING, "RAK TIMEOUT\n");
         return RAKStatus::TIMEOUT;
     }
 
     if (strstr(response, "OK") != nullptr) {
-        display->log(eLogLevel::DEBUGGING, "RAK OK\n");
         return RAKStatus::OK;
     } else {
-        display->log(eLogLevel::DEBUGGING, "RAK ERROR\n");
         return RAKStatus::ERROR;
     }
 }
@@ -1040,15 +979,12 @@ RAKStatus RAK3172::setDevEUI(char* deveui)
     snprintf(message, sizeof(message), "AT+DEVEUI=%s\r\n", deveui);
 
     if (!sendATCommand(message, response, sizeof(response), 2000)) {
-        display->log(eLogLevel::DEBUGGING, "RAK TIMEOUT\n");
         return RAKStatus::TIMEOUT;
     }
 
     if (strstr(response, "OK") != nullptr) {
-        display->log(eLogLevel::DEBUGGING, "RAK OK\n");
         return RAKStatus::OK;
     } else {
-        display->log(eLogLevel::DEBUGGING, "RAK ERROR\n");
         return RAKStatus::ERROR;
     }
 }
@@ -1058,7 +994,7 @@ RAKStatus RAK3172::setDevEUI(char* deveui)
  *
  * @param[out] deveui Buffer to store the Device EUI.
  */
-void RAK3172::getDevEUI(char* deveui)
+RAKStatus RAK3172::getDevEUI(char* deveui)
 {
     char message[32];
     char response[64];
@@ -1066,10 +1002,11 @@ void RAK3172::getDevEUI(char* deveui)
     snprintf(message, sizeof(message), "AT+DEVEUI=?\r\n");
 
     if (!sendATCommand(message, response, sizeof(response), 2000)) {
-        display->log(eLogLevel::DEBUGGING, "RAK TIMEOUT\n");
+        return RAKStatus::TIMEOUT;
     }
 
     extractString(response, deveui);
+    return RAKStatus::OK;
 }
 
 /**
@@ -1089,15 +1026,12 @@ RAKStatus RAK3172::setAppKey(char* appkey)
     snprintf(message, sizeof(message), "AT+APPKEY=%s\r\n", appkey);
 
     if (!sendATCommand(message, response, sizeof(response), 2000)) {
-        display->log(eLogLevel::DEBUGGING, "RAK TIMEOUT\n");
         return RAKStatus::TIMEOUT;
     }
 
     if (strstr(response, "OK") != nullptr) {
-        display->log(eLogLevel::DEBUGGING, "RAK OK\n");
         return RAKStatus::OK;
     } else {
-        display->log(eLogLevel::DEBUGGING, "RAK ERROR\n");
         return RAKStatus::ERROR;
     }
 }
@@ -1107,7 +1041,7 @@ RAKStatus RAK3172::setAppKey(char* appkey)
  *
  * @param[out] appkey Buffer to store the Application Key.
  */
-void RAK3172::getAppKey(char* appkey)
+RAKStatus RAK3172::getAppKey(char* appkey)
 {
     char message[32];
     char response[64];
@@ -1115,10 +1049,11 @@ void RAK3172::getAppKey(char* appkey)
     snprintf(message, sizeof(message), "AT+APPKEY=?\r\n");
 
     if (!sendATCommand(message, response, sizeof(response), 2000)) {
-        display->log(eLogLevel::DEBUGGING, "RAK TIMEOUT\n");
+        return RAKStatus::TIMEOUT;
     }
 
     extractString(response, appkey);
+    return RAKStatus::OK;
 }
 
 /**
@@ -1138,15 +1073,12 @@ RAKStatus RAK3172::setDevAddr(char* devaddr)
     snprintf(message, sizeof(message), "AT+DEVADDR=%s\r\n", devaddr);
 
     if (!sendATCommand(message, response, sizeof(response), 2000)) {
-        display->log(eLogLevel::DEBUGGING, "RAK TIMEOUT\n");
         return RAKStatus::TIMEOUT;
     }
 
     if (strstr(response, "OK") != nullptr) {
-        display->log(eLogLevel::DEBUGGING, "RAK OK\n");
         return RAKStatus::OK;
     } else {
-        display->log(eLogLevel::DEBUGGING, "RAK ERROR\n");
         return RAKStatus::ERROR;
     }
 }
@@ -1156,7 +1088,7 @@ RAKStatus RAK3172::setDevAddr(char* devaddr)
  *
  * @param[out] devaddr Buffer to store the Device Address.
  */
-void RAK3172::getDevAddr(char* devaddr)
+RAKStatus RAK3172::getDevAddr(char* devaddr)
 {
     char message[32];
     char response[64];
@@ -1164,10 +1096,11 @@ void RAK3172::getDevAddr(char* devaddr)
     snprintf(message, sizeof(message), "AT+DEVADDR=?\r\n");
 
     if (!sendATCommand(message, response, sizeof(response), 2000)) {
-        display->log(eLogLevel::DEBUGGING, "RAK TIMEOUT\n");
+        return RAKStatus::TIMEOUT;
     }
 
     extractString(response, devaddr);
+    return RAKStatus::OK;
 }
 
 /**
@@ -1187,15 +1120,12 @@ RAKStatus RAK3172::setAppsKey(char* appskey)
     snprintf(message, sizeof(message), "AT+APPSKEY=%s\r\n", appskey);
 
     if (!sendATCommand(message, response, sizeof(response), 2000)) {
-        display->log(eLogLevel::DEBUGGING, "RAK TIMEOUT\n");
         return RAKStatus::TIMEOUT;
     }
 
     if (strstr(response, "OK") != nullptr) {
-        display->log(eLogLevel::DEBUGGING, "RAK OK\n");
         return RAKStatus::OK;
     } else {
-        display->log(eLogLevel::DEBUGGING, "RAK ERROR\n");
         return RAKStatus::ERROR;
     }
 }
@@ -1205,7 +1135,7 @@ RAKStatus RAK3172::setAppsKey(char* appskey)
  *
  * @param[out] appskey Buffer to store the Application Session Key.
  */
-void RAK3172::getAppsKey(char* appskey)
+RAKStatus RAK3172::getAppsKey(char* appskey)
 {
     char message[32];
     char response[64];
@@ -1213,10 +1143,11 @@ void RAK3172::getAppsKey(char* appskey)
     snprintf(message, sizeof(message), "AT+APPSKEY=?\r\n");
 
     if (!sendATCommand(message, response, sizeof(response), 2000)) {
-        display->log(eLogLevel::DEBUGGING, "RAK TIMEOUT\n");
+        return RAKStatus::TIMEOUT;
     }
 
     extractString(response, appskey);
+    return RAKStatus::OK;
 }
 
 /**
@@ -1236,15 +1167,12 @@ RAKStatus RAK3172::setNwksKey(char* nwkskey)
     snprintf(message, sizeof(message), "AT+NWKSKEY=%s\r\n", nwkskey);
 
     if (!sendATCommand(message, response, sizeof(response), 2000)) {
-        display->log(eLogLevel::DEBUGGING, "RAK TIMEOUT\n");
         return RAKStatus::TIMEOUT;
     }
 
     if (strstr(response, "OK") != nullptr) {
-        display->log(eLogLevel::DEBUGGING, "RAK OK\n");
         return RAKStatus::OK;
     } else {
-        display->log(eLogLevel::DEBUGGING, "RAK ERROR\n");
         return RAKStatus::ERROR;
     }
 }
@@ -1254,7 +1182,7 @@ RAKStatus RAK3172::setNwksKey(char* nwkskey)
  *
  * @param[out] nwkskey Buffer to store the Network Session Key.
  */
-void RAK3172::getNwksKey(char* nwkskey)
+RAKStatus RAK3172::getNwksKey(char* nwkskey)
 {
     char message[32];
     char response[64];
@@ -1262,10 +1190,11 @@ void RAK3172::getNwksKey(char* nwkskey)
     snprintf(message, sizeof(message), "AT+NWKSKEY=?\r\n");
 
     if (!sendATCommand(message, response, sizeof(response), 2000)) {
-        display->log(eLogLevel::DEBUGGING, "RAK TIMEOUT\n");
+        return RAKStatus::TIMEOUT;
     }
 
     extractString(response, nwkskey);
+    return RAKStatus::OK;
 }
 
 //############## Multicast Configuration ###################
@@ -1293,15 +1222,12 @@ RAKStatus RAK3172::addMultiGroup(char group, char* devAddr, char* NwsKey, char* 
     snprintf(message, sizeof(message),  "AT+ADDMULC=%c:%s:%s:%s:%d:%d:%d\r", group, devAddr, NwsKey, AppsKey, frequency, DR, periodicity);
 
     if (!sendATCommand(message, response, sizeof(response), 2000)) {
-        display->log(eLogLevel::DEBUGGING, "RAK TIMEOUT\n");
         return RAKStatus::TIMEOUT;
     }
 
     if (strstr(response, "OK") != nullptr) {
-        display->log(eLogLevel::DEBUGGING, "RAK OK\n");
         return RAKStatus::OK;
     } else {
-        display->log(eLogLevel::DEBUGGING, "RAK ERROR\n");
         return RAKStatus::ERROR;
     }
 }
@@ -1323,15 +1249,12 @@ RAKStatus RAK3172::rmvMultiGroup(char *devAddr)
     snprintf(message, sizeof(message),  "AT+RMVMULC=%s\r", devAddr);
 
     if (!sendATCommand(message, response, sizeof(response), 2000)) {
-        display->log(eLogLevel::DEBUGGING, "RAK TIMEOUT\n");
         return RAKStatus::TIMEOUT;
     }
 
     if (strstr(response, "OK") != nullptr) {
-        display->log(eLogLevel::DEBUGGING, "RAK OK\n");
         return RAKStatus::OK;
     } else {
-        display->log(eLogLevel::DEBUGGING, "RAK ERROR\n");
         return RAKStatus::ERROR;
     }
 }

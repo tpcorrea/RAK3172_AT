@@ -3,11 +3,9 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <Arduino.h>
 
 #include "driver/uart.h"
 #include "driver/gpio.h"
-#include "Log/Log.h"
 
 #define EVT_AT_RESPONSE   (1 << 0)
 #define EVT_JOIN_RESPONSE   0x3 // 0b0011
@@ -110,15 +108,15 @@ public:
 
     // Set and Get keys
     RAKStatus setDevEUI(char* deveui);
-    void getDevEUI(char* deveui);
+    RAKStatus getDevEUI(char* deveui);
     RAKStatus setAppKey(char* appkey);
-    void getAppKey(char* appkey);
+    RAKStatus getAppKey(char* appkey);
     RAKStatus setDevAddr(char* devaddr);
-    void getDevAddr(char* devaddr);
+    RAKStatus getDevAddr(char* devaddr);
     RAKStatus setAppsKey(char* appskey);
-    void getAppsKey(char* appskey);
+    RAKStatus getAppsKey(char* appskey);
     RAKStatus setNwksKey(char* nwkskey);
-    void getNwksKey(char* nwkskey);
+    RAKStatus getNwksKey(char* nwkskey);
 
     // Multicast configuration
     RAKStatus addMultiGroup(char group, char* devAddr, char* NwsKey, char* AppsKey, int frequency, int DR, int periodicity);
