@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <Arduino.h>
 
 #include "driver/uart.h"
 #include "driver/gpio.h"
