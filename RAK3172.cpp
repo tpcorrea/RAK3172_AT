@@ -145,7 +145,7 @@ bool RAK3172::sendATCommand(const char* cmd, char* response, size_t maxLen, uint
  * @retval 1  Communication initialized correctly.   
  * @retval 0  Error.
  */
-int RAK3172::init(uart_port_t uart, uart_port_t tx, uart_port_t rx)
+int RAK3172::init(uart_port_t uart, int tx, int rx)
 {
     _uart = uart;
 

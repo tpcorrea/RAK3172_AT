@@ -76,7 +76,7 @@ public:
     RAK3172();
     ~RAK3172();
 
-    int init(uart_port_t uart, uart_port_t tx, uart_port_t rx);
+    int init(uart_port_t uart, int tx, int rx);
     RAKStatus setRegion(LoraRegion_t region);
     LoraRegion_t getRegion();
     RAKStatus setClass(LoraClass_t lora_class);
