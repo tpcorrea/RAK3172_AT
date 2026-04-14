@@ -17,58 +17,57 @@ RAK3172::~RAK3172()
 static void uart_task(void *param) {
     RAK3172* rak = (RAK3172*)param;
     uart_event_t event;
-    char data[256];
+    // Line buffer: accumulate bytes until \n so split UART events don't truncate long lines.
+    static char lineBuf[512];
+    static int  lineLen = 0;
 
     while (true) {
         if (xQueueReceive(uart_queue, &event, portMAX_DELAY)) {
             if (event.type == UART_DATA) {
-                int len = uart_read_bytes(rak->getUart(), (uint8_t*)data, event.size, pdMS_TO_TICKS(100));
-                data[len] = '\0';
+                char chunk[256];
+                int len = uart_read_bytes(rak->getUart(), (uint8_t*)chunk, event.size, pdMS_TO_TICKS(100));
 
-                /* ---------- AT RESPONSE ---------- */
-                if (rak->isWaitingAT()) {
-                    rak->appendAT(data, len);
+                // Append chunk to line buffer, processing any complete lines found.
+                for (int ci = 0; ci < len; ci++) {
+                    char c = chunk[ci];
+                    if (c == '\n') {
+                        lineBuf[lineLen] = '\0';
+                        char* line = lineBuf;
 
-                    if (strchr(data, '\n')) {
-                        xEventGroupSetBits(
-                            rak->getCommandsEventGroup(),
-                            EVT_AT_RESPONSE
-                        );
-                    }
-                }
-
-                 /* -------- JOIN DETECTION -------- */
-
-                else if(rak->getJoinStatus() == JoinStatus::JOINING){
-                    if (strstr(data, "JOINED") != nullptr ||
-                        strstr(data, "+EVT:JOINED") != nullptr)
-                    {
-                        xEventGroupSetBits(
-                            rak->getJoinEventGroup(),
-                            0x1
-                        );
-                    }
-
-                    if (strstr(data, "JOIN FAILED") != nullptr ||
-                        strstr(data, "+EVT:JOIN FAILED") != nullptr)
-                    {
-                        if(!rak->joinFail()){
-                            xEventGroupSetBits(
-                                rak->getJoinEventGroup(),
-                                0x2
-                            );
+                        /* ---------- AT RESPONSE ---------- */
+                        if (rak->isWaitingAT()) {
+                            rak->appendAT(line, lineLen);
+                            xEventGroupSetBits(rak->getCommandsEventGroup(), EVT_AT_RESPONSE);
                         }
-                    }
-                }
 
-                /* -------- DOWNLINK -------- */
+                        /* -------- JOIN DETECTION -------- */
+                        else if (rak->getJoinStatus() == JoinStatus::JOINING) {
+                            if (strstr(line, "JOINED") != nullptr ||
+                                strstr(line, "+EVT:JOINED") != nullptr)
+                            {
+                                xEventGroupSetBits(rak->getJoinEventGroup(), 0x1);
+                            }
+                            if (strstr(line, "JOIN FAILED") != nullptr ||
+                                strstr(line, "+EVT:JOIN FAILED") != nullptr)
+                            {
+                                if (!rak->joinFail()) {
+                                    xEventGroupSetBits(rak->getJoinEventGroup(), 0x2);
+                                }
+                            }
+                        }
 
-                else if (strstr(data, "RX") != nullptr ||
-                        strstr(data, "+EVT:RX") != nullptr)
-                {
-                    rak->parseDownlink(data);
-                    if (rak->getDownlinkCallback()) {
-                        rak->getDownlinkCallback()(data);
+                        /* -------- DOWNLINK -------- */
+                        else if (strstr(line, "+EVT:RX") != nullptr) {
+                            rak->parseDownlink(line);
+                            if (rak->getDownlinkCallback()) {
+                                rak->getDownlinkCallback()(line);
+                            }
+                        }
+
+                        lineLen = 0; // reset for next line
+                    } else if (c != '\r') {
+                        if (lineLen < (int)sizeof(lineBuf) - 1)
+                            lineBuf[lineLen++] = c;
                     }
                 }
             }
