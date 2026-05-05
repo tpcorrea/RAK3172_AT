@@ -122,6 +122,7 @@ public:
     // Multicast configuration
     RAKStatus addMultiGroup(char group, char* devAddr, char* NwsKey, char* AppsKey, int frequency, int DR, int periodicity);
     RAKStatus rmvMultiGroup(char *devAddr);
+    bool getMulticastConfig(char* response, size_t maxLen);
 
     // Downlink functions
     void parseDownlink(char* downlink);

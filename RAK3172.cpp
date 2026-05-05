@@ -1258,6 +1258,11 @@ RAKStatus RAK3172::rmvMultiGroup(char *devAddr)
     }
 }
 
+bool RAK3172::getMulticastConfig(char* response, size_t maxLen)
+{
+    return sendATCommand("AT+LSTMULC=?\r", response, maxLen, 2000);
+}
+
 //############## Downlink functions ###################
 
 /**
