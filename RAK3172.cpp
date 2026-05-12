@@ -1273,7 +1273,7 @@ void RAK3172::parseDownlink(char* downlink)
 {
     sscanf(
     downlink,
-    "+EVT:RX_%*c:%d:%d:%11[^:]:%d:%127s",
+    "+EVT:RX_%*c:%d:%d:%11[^:]:%d:%255s",
     &_lastDownlink.rssi,
     &_lastDownlink.snr,
     _lastDownlink.type,
