@@ -34,8 +34,20 @@ static void uart_task(void *param) {
                         lineBuf[lineLen] = '\0';
                         char* line = lineBuf;
 
+                        /* -------- DOWNLINK -------- */
+                        // Must be checked before isWaitingAT: ChirpStack delivers
+                        // downlinks in the RX1 window of an uplink, so +EVT:RX
+                        // arrives while AT+SEND is still pending. Without this
+                        // priority the line is silently eaten as an AT response.
+                        if (strstr(line, "+EVT:RX") != nullptr) {
+                            rak->parseDownlink(line);
+                            if (rak->getDownlinkCallback()) {
+                                rak->getDownlinkCallback()(line);
+                            }
+                        }
+
                         /* ---------- AT RESPONSE ---------- */
-                        if (rak->isWaitingAT()) {
+                        else if (rak->isWaitingAT()) {
                             rak->appendAT(line, lineLen);
                             xEventGroupSetBits(rak->getCommandsEventGroup(), EVT_AT_RESPONSE);
                         }
@@ -53,14 +65,6 @@ static void uart_task(void *param) {
                                 if (!rak->joinFail()) {
                                     xEventGroupSetBits(rak->getJoinEventGroup(), 0x2);
                                 }
-                            }
-                        }
-
-                        /* -------- DOWNLINK -------- */
-                        else if (strstr(line, "+EVT:RX") != nullptr) {
-                            rak->parseDownlink(line);
-                            if (rak->getDownlinkCallback()) {
-                                rak->getDownlinkCallback()(line);
                             }
                         }
 
