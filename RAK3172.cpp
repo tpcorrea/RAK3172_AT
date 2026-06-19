@@ -115,6 +115,12 @@ bool RAK3172::sendATCommand(const char* cmd, char* response, size_t maxLen, uint
     _atLen = 0;
     memset(_atResponse, 0, sizeof(_atResponse));
 
+    // Discard any stale EVT_AT_RESPONSE left set by a previous command's late
+    // line (e.g. the multi-line AT+LSTMULC reply before AT+JOIN). Without this,
+    // WaitBits can return immediately with an empty _atResponse, so the next
+    // command sees a blank reply ('') and is wrongly treated as an error.
+    xEventGroupClearBits(_commandsEventGroup, EVT_AT_RESPONSE);
+
     setWaitingAT(true);
 
     uart_write_bytes(_uart, cmd, strlen(cmd));
