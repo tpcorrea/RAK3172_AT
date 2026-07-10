@@ -107,6 +107,10 @@ public:
     RAKStatus join(int autoJoin = 0, int interval = 8, int numAttempts = 0);
     RAKStatus send(int port, char* data);
 
+    // Module information (read-only)
+    RAKStatus getVersion(char* version);
+    RAKStatus getHwModel(char* model);
+
     // Set and Get keys
     RAKStatus setDevEUI(char* deveui);
     RAKStatus getDevEUI(char* deveui);

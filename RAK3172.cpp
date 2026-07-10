@@ -1003,6 +1003,46 @@ RAKStatus RAK3172::setDevEUI(char* deveui)
  *
  * @param[out] deveui Buffer to store the Device EUI.
  */
+/**
+ * @brief Gets the module firmware version (AT+VER).
+ *
+ * @param[out] version Buffer to store the firmware version string.
+ */
+RAKStatus RAK3172::getVersion(char* version)
+{
+    char message[16];
+    char response[64];
+
+    snprintf(message, sizeof(message), "AT+VER=?\r\n");
+
+    if (!sendATCommand(message, response, sizeof(response), 2000)) {
+        return RAKStatus::TIMEOUT;
+    }
+
+    extractString(response, version);
+    return RAKStatus::OK;
+}
+
+/**
+ * @brief Gets the module hardware model (AT+HWMODEL), e.g. "rak3172".
+ *
+ * @param[out] model Buffer to store the hardware model string.
+ */
+RAKStatus RAK3172::getHwModel(char* model)
+{
+    char message[16];
+    char response[64];
+
+    snprintf(message, sizeof(message), "AT+HWMODEL=?\r\n");
+
+    if (!sendATCommand(message, response, sizeof(response), 2000)) {
+        return RAKStatus::TIMEOUT;
+    }
+
+    extractString(response, model);
+    return RAKStatus::OK;
+}
+
 RAKStatus RAK3172::getDevEUI(char* deveui)
 {
     char message[32];
