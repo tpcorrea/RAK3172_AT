@@ -88,6 +88,7 @@ public:
     int getSubBand();
     RAKStatus setADR(int adr);
     int getADR();
+    int getNetworkJoinStatus();   // AT+NJS=? : 1 joined, 0 not joined, -1 query error
     RAKStatus setDR(int dr);
     int getDR();
     RAKStatus setAck(int ack);

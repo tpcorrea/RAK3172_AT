@@ -526,6 +526,28 @@ int RAK3172::getADR()
 }
 
 /**
+ * @brief Gets the network join status as reported by the module's own stack
+ *        (AT+NJS=?), independent of this driver's event-based tracking.
+ *
+ * @retval 1  Joined.
+ * @retval 0  Not joined.
+ * @retval -1 Query failed (timeout / invalid response).
+ */
+int RAK3172::getNetworkJoinStatus()
+{
+    char message[16];
+    char response[32];
+
+    snprintf(message, sizeof(message), "AT+NJS=?\r\n");
+
+    if (!sendATCommand(message, response, sizeof(response), 2000)) {
+        return -1;
+    }
+
+    return extractInt(response);
+}
+
+/**
  * @brief Sets the LoRaWAN data rate.
  *
  * @param[in] dr Data rate index (region dependent).
